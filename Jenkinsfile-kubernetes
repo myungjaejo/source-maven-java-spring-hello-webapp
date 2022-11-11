@@ -59,6 +59,7 @@ spec:
           sh 'executor --context=dir:///home/jenkins/agent/workspace/kube_pipeline/ --destination=myungjaejo/hello-world:$BUILD_NUMBER --destination=myungjaejo/hello-world:latest'
         }
       }
+    }
     stage('Update K8s Manifests & Push') {
       environment {
         githubUser = 'myungjae jo' //Ryan Jang
