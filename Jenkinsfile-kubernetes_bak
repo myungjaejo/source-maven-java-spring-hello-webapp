@@ -59,30 +59,6 @@ spec:
           sh 'executor --context=dir:///home/jenkins/agent/workspace/kube_pipeline/ --destination=myungjaejo/hello-world:$BUILD_NUMBER --destination=myungjaejo/hello-world:latest'
         }
       }
-    stage('Update K8s Manifests & Push') {
-      environment {
-        githubUser = 'myungjae jo' //Ryan Jang
-        githubEmail = 'myungjae.jo@gmail.com' //c1t1d0s7@example.com
-        githubId = 'myungjaejo' //c1t1d0s7 
-        githubRepo = 'deploy-kube-object' //jenkins-kube-deploy
-        githubURL = "https://github.com/${githubId}/${githubRepo}.git"
-        dockerhubId = 'myungjaejo' //c1t1d0s7
-        dockerhubRepo = 'hello-world' //hello-world
-      }
-      steps {
-        container('git') {
-          git branch: 'main', credentialsId: 'github-credential', url: "${githubURL}"
-          sh "git config --global --add safe.directory ${workspace}"
-          sh "git config --global user.name ${githubUser}"
-          sh "git config --global user.email ${githubEmail}"
-          sh 'sed -i "s/image:.*/image: ${dockerhubId}\\/${dockerhubRepo}:${BUILD_NUMBER}/g" deployment.yaml'
-          sh 'git add deployment.yaml'
-          sh 'git commit -m "Jenkins Build Number - ${BUILD_NUMBER}"'
-          withCredentials([gitUsernamePassword(credentialsId: 'github-credential', gitToolName: 'Default')]) {
-            sh 'git push --set-upstream origin main'
-          }
-        }
-      }
     }
   }
 }
